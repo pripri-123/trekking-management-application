@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+Staff Registration
+{% endblock %}
+{% block content %}
+<body class="text-center">
+    <div class="container">
+        <form method="POST" class="form-register" style="color:white">
+            {{ form.hidden_tag() }}
+            <h1 class="h3 mb-3 font-weight-normal">Staff Registration</h1>
+            {{ form.full_name.label() }}
+            {{ form.full_name(class="form-control") }}
+
+            {{ form.username.label() }}
+            {{ form.username(class="form-control") }}
+
+            {{ form.email.label() }}
+            {{ form.email(class="form-control") }}
+
+            {{ form.phone.label() }}
+            {{ form.phone(class="form-control") }}
+
+            {{ form.password.label() }}
+            {{ form.password(class="form-control") }}
+
+            {{ form.confirm_password.label() }}
+            {{ form.confirm_password(class="form-control") }}
+            <br>
+            {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+        </form>
+    </div>
+</body>
+{% endblock %}

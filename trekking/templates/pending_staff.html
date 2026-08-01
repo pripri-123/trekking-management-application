@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+Pending Staff
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Pending Staff Requests</h1>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in staff_members %}
+                <tr>
+                    <td>{{ staff.id }}</td>
+                    <td>{{ staff.user.full_name }}</td>
+                    <td>{{ staff.phone }}</td>
+                    <td>{{ staff.status }}</td>
+                    <td>
+                        <a class="btn btn-success btn-sm" href="{{ url_for('approve_staff',staff_id=staff.id) }}">Approve</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,8 +1,14 @@
-from trekking import db
+from trekking import db, login_manager
 from datetime import datetime
-import bcrypt
+from trekking import bcrypt
+from flask_login import UserMixin
 
-class User(db.Model): #Superclass, subclasses: trekker, staff, admin
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin): #Superclass, subclasses: trekker, staff, admin
     id = db.Column(db.Integer(),primary_key=True)
     full_name = db.Column(db.String(100),nullable=False)
     username = db.Column(db.String(length=30),nullable=False,unique=True)
@@ -20,19 +26,15 @@ class User(db.Model): #Superclass, subclasses: trekker, staff, admin
         raise AttributeError('Password not readable')
 
     @password.setter
-    def password(self, password):
-        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    def password(self, plain_text_password):
+        self.password_hash = bcrypt.generate_password_hash(plain_text_password).decode('utf-8')
 
-    def verify_password(self, password):
-        return bcrypt.check_password_hash(self.password_hash, password)
+    def verify_password(self, attempted_password):
+        return bcrypt.check_password_hash(self.password_hash, attempted_password)
 
     def update_last_login(self):
-        self.last_login = datetime.now
+        self.last_login = datetime.now()
         db.session.commit()
-
-    def get_id(self):
-        return str(self.id)
-
 
 class Booking(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -86,3 +88,4 @@ class Trek(db.Model):
     
     def __repr__(self):
         return f'{self.name} Trek'
+
