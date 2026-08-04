@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}
+My Profile
+{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width:1000px;">
+    <h3>My Profile</h3>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.full_name.label }}
+            {{ form.full_name(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.phone.label }}
+            {{ form.phone(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}
+My Treks
+{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width:1000px;">
+    <h2>My Assigned Treks</h2>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Trek</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Participants</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trek in treks %}
+            <tr>
+                <td>{{ trek.id }}</td>
+                <td>{{ trek.name }}</td>
+                <td>{{ trek.location }}</td>
+                <td>{{ trek.status }}</td>
+                <td>{{ trek.bookings|length }}</td>
+                <td>
+                    <a href="{{ url_for('manage_staff_trek', trek_id=trek.id) }}" class="btn btn-primary btn-sm">Manage</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
