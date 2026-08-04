@@ -5,9 +5,16 @@
 {% block content %}
     <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark" style="color:white">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
-            <h1 class="display-4 font-weight-normal">MAD1 Trekking page</h1>
+            <h1 class="display-4 font-weight-normal">Trek & Co</h1>
+            <p class="lead font-weight-bold">The Trekkers Community of India</p>
             <p class="lead font-weight-normal">Start by clicking link below</p>
-            <a class="btn btn-primary" href="{{ url_for('login_page') }}">Get Started</a>
+            {% if current_user.is_authenticated and current_user.role == 'ADMIN' %}
+                <a class="btn btn-primary" href="{{ url_for('admin_dashboard') }}">Get Started</a>
+            {% elif current_user.is_authenticated and current_user.role == 'STAFF' %}
+                <a class="btn btn-primary" href="{{ url_for('staff_dashboard') }}">Get Started</a>
+            {% else %}
+                <a class="btn btn-primary" href="{{ url_for('login_page') }}">Get Started</a>
+            {% endif %}
         </div>
         <div class="product-device box-shadow d-none d-md-block"></div>
         <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>

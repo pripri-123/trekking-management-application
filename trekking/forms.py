@@ -64,7 +64,7 @@ class TrekSearchForm(FlaskForm):
 class TrekForm(FlaskForm):
     name = StringField('Trek Name', validators=[DataRequired(), Length(max=30)])
     location = StringField('Location', validators=[DataRequired(), Length(max=40)])
-    duration = IntegerField('Duration (Days)', validators=[DataRequired(), NumberRange(min=1)])
+    duration = IntegerField('Duration (days)', validators=[DataRequired(), NumberRange(min=1)])
     difficulty = SelectField('Difficulty', choices=[('Easy', 'Easy'), ('Moderate', 'Moderate'), ('Hard', 'Hard')], validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired(), Length(max=1000)])
     assigned_staff = SelectField('Assigned Staff', coerce=int, choices=[])
@@ -90,4 +90,8 @@ class TrekForm(FlaskForm):
         if self.start_date.data and field.data:
             if field.data < self.start_date.data:
                 raise ValidationError('End date must be after start date.')
-            
+
+
+class AssignStaffForm(FlaskForm):
+    staff = SelectField('Staff',coerce=int)
+    submit=SubmitField('Assign Staff')

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+Bookings
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>All Bookings</h2>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Trek</th>
+                <th>Booking Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.user.username }}</td>
+                <td>{{ booking.trek.name }}</td>
+                <td>{{ booking.booking_date.date() }}</td>
+                <td>{{ booking.booking_status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-info" href="{{ url_for('trek_history') }}" ><i class="bi bi-clock-history"></i>Trek History</a>
+</div>
+{% endblock %}

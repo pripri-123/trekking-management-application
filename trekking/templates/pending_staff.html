@@ -16,7 +16,7 @@ Pending Staff
             </tr>
         </thead>
         <tbody>
-            {% for staff in staff_members %}
+            {% for staff in pending_staff %}
                 <tr>
                     <td>{{ staff.id }}</td>
                     <td>{{ staff.user.full_name }}</td>
@@ -24,6 +24,9 @@ Pending Staff
                     <td>{{ staff.status }}</td>
                     <td>
                         <a class="btn btn-success btn-sm" href="{{ url_for('approve_staff',staff_id=staff.id) }}">Approve</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-success btn-sm" href="{{ url_for('reject_staff',staff_id=staff.id) }}">Reject</a>
                     </td>
                 </tr>
             {% endfor %}

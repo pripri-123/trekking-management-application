@@ -1,21 +1,100 @@
 {% extends 'base.html' %}
-
 {% block title %}
 Admin Dashboard
 {% endblock %}
 
 {% block content %}
-
 <div class="container mt-4">
+   <br>
+      <div class="row">
+         <div class="col-md-3">
+               <div class="card text-dark">
+                  <div class="card-body">
+                     <h6>Total Treks</h6>
+                     <div class="d-flex justify-content-between align-items-center">
+                        <h3>{{ treks }}</h3>
+                        <i class="bi bi-signpost-split" style="font-size:2rem;"></i>
+                     </div>
+                  </div>
+               </div>
+         </div>
 
-<h1>Admin Dashboard</h1>
+         <div class="col-md-3">
+               <div class="card text-dark">
+                  <div class="card-body">
+                        <h6> Total Users </h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                           <h3>{{ users }}</h3>
+                           <i class="bi bi-person" style="font-size:2rem;"></i>
+                        </div>
+                  </div>
+               </div>
+         </div>
 
-<h4>
-Welcome {{ current_user.full_name }}
-</h4>
+         <div class="col-md-3">
+               <div class="card text-dark">
+                  <div class="card-body">
+                     <h6>Total Staff</h6>
+                     <div class="d-flex justify-content-between align-items-center">
+                        <h3>{{ staffs }}</h3>
+                        <i class="bi bi-people" style="font-size:2rem;"></i>
+                     </div>
+                  </div>
+               </div>
+         </div>
+         <div class="col-md-3">
+               <div class="card text-dark">
+                  <div class="card-body">
+                     <h6>Total Bookings</h6>
+                     <div class="d-flex justify-content-between align-items-center">
+                        <h3>{{ bookings }}</h3>
+                        <i class="bi bi-calendar3" style="font-size:2rem;"></i>
+                     </div>
+                  </div>
+               </div>
+         </div>
+      </div>
+      <br><br>
+      <h4>Recent Bookings</h4>
 
-<hr>
+      <table class="table table-dark table-hover">
+         <thead>
+               <tr>
+                  <th>Booking ID</th>
+                  <th>User</th>
+                  <th>Trek</th>
+                  <th>Booking Date</th>
+                  <th>Status</th>
+               </tr>
+         </thead>
 
+         <tbody>
+
+               {% for booking in recent_bookings %}
+
+               <tr>
+                  <td>{{ booking.id }}</td>
+
+                  <td>{{ booking.user.username }}</td>
+
+                  <td>{{ booking.trek.name }}</td>
+
+                  <td>{{ booking.booking_date.strftime('%d-%m-%Y') }}</td>
+
+                  <td>{{ booking.booking_status }}</td>
+               </tr>
+
+               {% endfor %}
+
+         </tbody>
+      </table>
+
+      <div class="text-right">
+         <a href="{{ url_for('view_bookings') }}"
+            class="btn btn-primary">
+               View All Bookings
+         </a>
+      </div>
 <a class="btn btn-warning"
    href="{{ url_for('pending_staff') }}">
    Pending Staff Requests

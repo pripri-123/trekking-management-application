@@ -78,7 +78,7 @@ class Trek(db.Model):
     difficulty = db.Column(db.Enum('Easy','Moderate','Hard'),nullable=False)
     description = db.Column(db.Text,nullable=False)
     assigned_staff = db.Column(db.Integer,db.ForeignKey('staff.id'),nullable=False)
-    status = db.Column(db.Enum('Pending','Approved','Open','Closed','Completed'),default='Pending')
+    status = db.Column(db.Enum('Pending','Open','Closed','Completed'),default='Pending')
     start_date = db.Column(db.Date, nullable = False)
     end_date = db.Column(db.Date, nullable = False)
     created_at = db.Column(db.DateTime, default=datetime.now)

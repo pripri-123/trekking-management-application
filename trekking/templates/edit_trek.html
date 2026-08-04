@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}
+Add Trek
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-width:900px;">
+            <h3 class="mb-4">{{ title }}</h3>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.name.label }}
+                            {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.location.label }}
+                            {{ form.location(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.difficulty.label }}
+                            {{ form.difficulty(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.duration.label }}
+                            {{ form.duration(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.total_slots.label }}
+                            {{ form.total_slots(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.start_date.label }}
+                            {{ form.start_date(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.end_date.label }}
+                            {{ form.end_date(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.assigned_staff.label }}
+                            {{ form.assigned_staff(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.status.label }}
+                            {{ form.status(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.description.label }}
+                            {{ form.description(class="form-control", rows="4") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right mt-3">
+                    <a href="{{ url_for('manage_treks') }}" class="btn btn-secondary"> Cancel</a>
+                    <button type="submit" class="btn btn-primary">{{ title }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
