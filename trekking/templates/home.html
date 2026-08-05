@@ -13,7 +13,7 @@
             {% elif current_user.is_authenticated and current_user.role == 'STAFF' %}
                 <a class="btn btn-primary" href="{{ url_for('staff_dashboard') }}">Get Started</a>
             {% else %}
-                <a class="btn btn-primary" href="{{ url_for('login_page') }}">Get Started</a>
+                <a class="btn btn-primary" href="{{ url_for('treks_page') }}">Get Started</a>
             {% endif %}
         </div>
         <div class="product-device box-shadow d-none d-md-block"></div>

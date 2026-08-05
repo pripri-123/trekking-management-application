@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+Profile
+{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width:700px;">
+    <div class="card text-dark">
+        <div class="card-body">
+            <h3>My Profile</h3>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.full_name.label }}
+                    {{ form.full_name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

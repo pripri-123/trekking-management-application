@@ -54,11 +54,11 @@ class Booking(db.Model):
 class TrekHistory(db.Model):
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'),primary_key=True) 
     completion_date = db.Column(db.Date)
-    rating = db.Column(db.Integer,nullable=False) #1-5, apply logic in code
-    review = db.Column(db.Text)
+    rating = db.Column(db.Integer, nullable=True)
+    review = db.Column(db.Text, nullable=True)
     __table_args__ = (
         db.CheckConstraint(
-            "rating >= 1 AND rating <= 5",
+            "rating IS NULL OR (rating >= 1 AND rating <= 5)",
             name="check_rating_range"
         ),
     )
@@ -78,7 +78,7 @@ class Trek(db.Model):
     difficulty = db.Column(db.Enum('Easy','Moderate','Hard'),nullable=False)
     description = db.Column(db.Text,nullable=False)
     assigned_staff = db.Column(db.Integer,db.ForeignKey('staff.id'),nullable=False)
-    status = db.Column(db.Enum('Pending','Open','Closed','Completed'),default='Pending')
+    status = db.Column(db.Enum('Pending','Open','Closed','Completed', 'Ongoing'),default='Pending')
     start_date = db.Column(db.Date, nullable = False)
     end_date = db.Column(db.Date, nullable = False)
     created_at = db.Column(db.DateTime, default=datetime.now)

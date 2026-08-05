@@ -3,7 +3,35 @@
 Available Treks
 {% endblock %}
 {% block content %}
-<h1>Treks Page</h1>
+<div class="container mt-4">
+    <form method="GET" class="mb-3">
+        <div class="row">
+            <div class="col-md-5">
+                <input type="text" name="search" class="form-control" placeholder="Search by name or location" value="{{ search }}">
+            </div>
+            <div class="col-md-4">
+                <select name="difficulty" class="form-control">
+                    <option value="Easy"
+                        {% if difficulty == 'Easy' %}selected{% endif %}>
+                        Easy
+                    </option>
+
+                    <option value="Moderate"
+                        {% if difficulty ==  'Moderate' %}selected{% endif %}>
+                        Moderate
+                    </option>
+
+                    <option value="Hard"
+                        {% if difficulty == 'Hard' %}selected{% endif %}>
+                        Hard
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary btn-block">Search</button>
+            </div>
+        </div>
+    </form>
     <table class="table table-dark table-hover">
         <thead>
             <tr>
@@ -38,8 +66,7 @@ Available Treks
                 </button>
                 {% if trek.available_slots > 0 and trek.status == 'Open' %}
                 <form method="POST"
-                      action="{{ url_for('book_trek',
-                                         trek_id=trek.id) }}"
+                      action="{{ url_for('book_trek',trek_id=trek.id) }}"
                       style="display:inline;">
                     <button class="btn btn-success btn-sm">Book</button>
                 </form>
@@ -51,4 +78,98 @@ Available Treks
         {% endfor %}
         </tbody>
     </table>
+    {% for trek in treks %}
+
+    <div class="modal fade"
+        id="infoModal{{ trek.id }}"
+        tabindex="-1"
+        role="dialog">
+
+        <div class="modal-dialog modal-lg" role="document">
+
+            <div class="modal-content text-dark">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        {{ trek.name }}
+                    </h5>
+
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal">
+
+                        <span>&times;</span>
+
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        <strong>Location:</strong>
+                        {{ trek.location }}
+                    </p>
+
+                    <p>
+                        <strong>Difficulty:</strong>
+                        {{ trek.difficulty }}
+                    </p>
+
+                    <p>
+                        <strong>Duration:</strong>
+                        {{ trek.duration }} Days
+                    </p>
+
+                    <p>
+                        <strong>Available Slots:</strong>
+                        {{ trek.available_slots }}/{{ trek.total_slots }}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        {{ trek.status }}
+                    </p>
+
+                    <p>
+                        <strong>Start Date:</strong>
+                        {{ trek.start_date }}
+                    </p>
+
+                    <p>
+                        <strong>End Date:</strong>
+                        {{ trek.end_date }}
+                    </p>
+
+                    <hr>
+
+                    <p>
+                        <strong>Description:</strong>
+                    </p>
+
+                    <p>
+                        {{ trek.description }}
+                    </p>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal">
+                        Close
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+</div>
 {% endblock %}

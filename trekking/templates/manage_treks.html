@@ -44,6 +44,11 @@ Manage Treks
                     <td>{{ trek.status }}</td>
                     <td>
                         <a class="btn btn-success btn-sm" href="{{ url_for('edit_trek',trek_id=trek.id) }}"><i class="bi bi-pencil-square"></i></a>
+                        <form method="POST"
+                            action="{{ url_for('complete_trek', trek_id=trek.id) }}"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-warning btn-sm">Complete</button>
+                        </form>
                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ trek.id }}"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>
