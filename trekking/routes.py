@@ -12,12 +12,6 @@ from datetime import date
 def home_page():
     return render_template('home.html')
 
-"""
-@app.route('/about/<username>')
-def about_page(username):
-    return f'<h2>About Page of {username}</h2>'
-"""
-
 @app.route('/treks')
 @login_required
 def treks_page():
@@ -66,6 +60,7 @@ def book_trek(trek_id):
     return redirect(url_for('my_bookings'))
 
 @app.route('/cancel_booking/<int:booking_id>', methods=['POST'])
+@login_required
 def cancel_booking(booking_id):
     booking = Booking.query.get_or_404(booking_id)
 
@@ -87,31 +82,29 @@ def cancel_booking(booking_id):
     return redirect(url_for('my_bookings'))
 
 @app.route('/my_bookings')
+@login_required
 def my_bookings():
+    if current_user.role != 'TREKKER':
+        flash('Access Denied.', 'danger')
+        return redirect(url_for('home_page'))
     bookings = Booking.query.filter_by(user_id=current_user.id).all()
     return render_template('user/my_bookings.html', bookings=bookings)
 
-@app.route('/cancel_booking/<int:booking_id>', methods=['POST'])
-def cancel_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
-    if booking.user_id != current_user.id:
+@app.route('/my_history')
+@login_required
+def my_history():
+    if current_user.role != 'TREKKER':
         flash('Access Denied.', 'danger')
         return redirect(url_for('home_page'))
-
-    booking.trek.available_slots += 1
-    db.session.delete(booking)
-    db.session.commit()
-
-    flash('Booking cancelled successfully.', 'success')
-    return redirect(url_for('my_bookings'))
-
-@app.route('/my_history')
-def my_history():
     histories = TrekHistory.query.join(Booking).filter(Booking.user_id == current_user.id).all()
     return render_template('user/my_history.html', histories=histories)
 
 @app.route('/profile', methods=['GET','POST'])
+@login_required
 def profile():
+    if current_user.role != 'TREKKER':
+        flash('Access Denied.', 'danger')
+        return redirect(url_for('home_page'))
     form = ProfileForm()
     if request.method == 'GET':
         form.full_name.data = current_user.full_name
@@ -134,8 +127,11 @@ def profile():
 
 
 @app.route('/rate_trek/<int:booking_id>', methods=['GET', 'POST'])
+@login_required
 def rate_trek(booking_id):
-
+    if current_user.role != 'TREKKER':
+        flash('Access Denied.', 'danger')
+        return redirect(url_for('home_page'))
     booking = Booking.query.get_or_404(booking_id)
     if booking.user_id != current_user.id:
         flash('Access Denied.', 'danger')
@@ -148,6 +144,9 @@ def rate_trek(booking_id):
 
     if request.method == 'POST':
         history.rating = int(request.form.get('rating'))
+        if history.rating < 1 or history.rating > 5:
+            flash('Rating must be between 1 and 5.', 'danger')
+            return redirect(url_for('rate_trek', booking_id=booking.id))
         history.review = request.form.get('review')
         db.session.commit()
         flash('Review submitted successfully.', 'success')
@@ -156,6 +155,7 @@ def rate_trek(booking_id):
     return render_template('user/rate_trek.html', booking=booking, history=history)
 
 @app.route('/register', methods=['GET','POST'])
+@login_required
 def register_page():
     form = TrekkerRegisterForm()
     if form.validate_on_submit():
@@ -175,6 +175,7 @@ def register_page():
 
 
 @app.route('/staff/register', methods=['GET', 'POST'])
+@login_required
 def staff_register_page():
     form = StaffRegisterForm()
     if form.validate_on_submit():
@@ -191,6 +192,7 @@ def staff_register_page():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@login_required
 def login_page():
     form = LoginForm()
     if form.validate_on_submit():
