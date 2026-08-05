@@ -58,9 +58,32 @@ def book_trek(trek_id):
         return redirect(url_for('treks_page'))
     booking = Booking(user_id=current_user.id, trek_id=trek.id)
     trek.available_slots -= 1
+    if trek.available_slots == 0:
+        trek.status = 'Closed'
     db.session.add(booking)
     db.session.commit()
     flash('Trek booked successfully!', 'success')
+    return redirect(url_for('my_bookings'))
+
+@app.route('/cancel_booking/<int:booking_id>', methods=['POST'])
+def cancel_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+
+    if booking.user_id != current_user.id:
+        flash('Access Denied.', 'danger')
+        return redirect(url_for('my_bookings'))
+
+    if booking.booking_status != 'Booked':
+        flash('Cannot cancel this booking.', 'warning')
+        return redirect(url_for('my_bookings'))
+
+    booking.booking_status = 'Cancelled'
+    booking.trek.available_slots += 1
+    if booking.trek.status == 'Closed':
+        booking.trek.status = 'Open'
+    db.session.commit()
+
+    flash('Booking cancelled successfully.', 'success')
     return redirect(url_for('my_bookings'))
 
 @app.route('/my_bookings')
@@ -184,7 +207,7 @@ def login_page():
                         if attempted_user.staff_profile.status == "Rejected":
                             flash("Admin has rejected your staff request.", category='danger')
                             return redirect(url_for('login_page'))
-                        
+                
             login_user(attempted_user)
             flash(f'Success! You are logged in as: {attempted_user.username} ', category='success')
             attempted_user.update_last_login()
