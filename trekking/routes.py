@@ -13,7 +13,6 @@ def home_page():
     return render_template('home.html')
 
 @app.route('/treks')
-@login_required
 def treks_page():
     search = request.args.get('search', '').strip()
     difficulty = request.args.get('difficulty', '')
@@ -46,10 +45,19 @@ def book_trek(trek_id):
         flash('No slots available.', 'danger')
         return redirect(url_for('treks_page'))
     
-    existing = Booking.query.filter_by(user_id=current_user.id, trek_id=trek.id).first()
+    cancelled_booking = Booking.query.filter_by(user_id=current_user.id, trek_id=trek.id, booking_status='Cancelled').first()
+    if cancelled_booking:
+        cancelled_booking.booking_status = 'Booked'
+        trek.available_slots -= 1
+        db.session.commit()
+        flash('Trek booked successfully!', 'success')
+        return redirect(url_for('my_bookings'))
+
+    existing = Booking.query.filter(Booking.user_id == current_user.id, Booking.trek_id == trek.id, Booking.booking_status != 'Cancelled').first()
     if existing:
-        flash('You have already booked this trek.', 'warning')
+        flash('You already booked this trek.', 'warning')
         return redirect(url_for('treks_page'))
+    
     booking = Booking(user_id=current_user.id, trek_id=trek.id)
     trek.available_slots -= 1
     if trek.available_slots == 0:
@@ -57,7 +65,7 @@ def book_trek(trek_id):
     db.session.add(booking)
     db.session.commit()
     flash('Trek booked successfully!', 'success')
-    return redirect(url_for('my_bookings'))
+    return redirect(url_for('user/my_bookings'))
 
 @app.route('/cancel_booking/<int:booking_id>', methods=['POST'])
 @login_required
@@ -120,6 +128,8 @@ def profile():
         current_user.full_name = form.full_name.data
         current_user.username = form.username.data
         current_user.email = form.email.data
+        if form.new_password.data:
+            current_user.password = form.new_password.data
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile'))
@@ -155,7 +165,6 @@ def rate_trek(booking_id):
     return render_template('user/rate_trek.html', booking=booking, history=history)
 
 @app.route('/register', methods=['GET','POST'])
-@login_required
 def register_page():
     form = TrekkerRegisterForm()
     if form.validate_on_submit():
@@ -175,7 +184,6 @@ def register_page():
 
 
 @app.route('/staff/register', methods=['GET', 'POST'])
-@login_required
 def staff_register_page():
     form = StaffRegisterForm()
     if form.validate_on_submit():
@@ -192,7 +200,6 @@ def staff_register_page():
 
 
 @app.route('/login', methods=['GET', 'POST'])
-@login_required
 def login_page():
     form = LoginForm()
     if form.validate_on_submit():
@@ -617,6 +624,8 @@ def staff_profile():
         current_user.full_name = form.full_name.data
         current_user.email = form.email.data
         staff.phone = form.phone.data
+        if form.new_password.data:
+            current_user.password = form.new_password.data
         db.session.commit()
 
         flash('Profile updated successfully.', 'success')

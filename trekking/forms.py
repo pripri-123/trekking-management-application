@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import FloatField, DateField, IntegerField, StringField, PasswordField, SelectField, SubmitField, TextAreaField
-from wtforms.validators import InputRequired, DataRequired, Length, NumberRange, EqualTo, Email, NumberRange, ValidationError
+from wtforms.validators import InputRequired, DataRequired, Length, NumberRange, Optional, EqualTo, Email, NumberRange, ValidationError
 from trekking.models import Trek, Staff, User
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(min=4, max=15)])
@@ -99,14 +100,18 @@ class AssignStaffForm(FlaskForm):
 class StaffProfileForm(FlaskForm):
     full_name = StringField('Full Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    phone = StringField('Phone Number', validators=[Length(min=10, max=10)])
+    phone = StringField('Phone Number', validators=[DataRequired(), Length(min=10, max=10)])
+    new_password = PasswordField('New Password', validators=[Optional(), Length(min=8, message='Password must be at least 8 characters long.')])
+    confirm_password = PasswordField('Confirm Password', validators=[Optional(), EqualTo('new_password', message='Passwords must match.'), Length(min=8, message='Password must be at least 8 characters long.')])
     submit = SubmitField('Update Profile')
 
 
-    
 class ProfileForm(FlaskForm):
     full_name = StringField('Full Name', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    #include password
+    new_password = PasswordField('New Password', validators=[Optional(), Length(min=8, message='Password must be at least 8 characters long.')])
+    confirm_password = PasswordField('Confirm Password', validators=[Optional(), EqualTo('new_password', message='Passwords must match.'), Length(min=8, message='Password must be at least 8 characters long.')])
     submit = SubmitField('Update Profile')
+
+    
