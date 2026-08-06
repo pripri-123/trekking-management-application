@@ -5,7 +5,7 @@ Admin Dashboard
 {% block content %}
 <div class="container mt-4">
    <br>
-      <div class="row">
+      <div class="row g-3">
          <div class="col-md-3">
                <div class="card text-dark">
                   <div class="card-body">
@@ -55,38 +55,39 @@ Admin Dashboard
       </div>
       <br><br>
       <h4>Recent Bookings</h4>
+      <div class="table-responsive">
+         <table class="table table-dark table-hover">
+            <thead>
+                  <tr>
+                     <th>Booking ID</th>
+                     <th>User</th>
+                     <th>Trek</th>
+                     <th>Booking Date</th>
+                     <th>Status</th>
+                  </tr>
+            </thead>
 
-      <table class="table table-dark table-hover">
-         <thead>
-               <tr>
-                  <th>Booking ID</th>
-                  <th>User</th>
-                  <th>Trek</th>
-                  <th>Booking Date</th>
-                  <th>Status</th>
-               </tr>
-         </thead>
+            <tbody>
 
-         <tbody>
+                  {% for booking in recent_bookings %}
 
-               {% for booking in recent_bookings %}
+                  <tr>
+                     <td>{{ booking.id }}</td>
 
-               <tr>
-                  <td>{{ booking.id }}</td>
+                     <td>{{ booking.user.username }}</td>
 
-                  <td>{{ booking.user.username }}</td>
+                     <td>{{ booking.trek.name }}</td>
 
-                  <td>{{ booking.trek.name }}</td>
+                     <td>{{ booking.booking_date.strftime('%d-%m-%Y') }}</td>
 
-                  <td>{{ booking.booking_date.strftime('%d-%m-%Y') }}</td>
+                     <td>{{ booking.booking_status }}</td>
+                  </tr>
 
-                  <td>{{ booking.booking_status }}</td>
-               </tr>
+                  {% endfor %}
 
-               {% endfor %}
-
-         </tbody>
-      </table>
+            </tbody>
+         </table>
+      </div>
 
       <div class="text-right">
          <a href="{{ url_for('view_bookings') }}"

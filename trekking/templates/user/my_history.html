@@ -6,32 +6,34 @@ My Trek History
 <div class="container mt-4" style="max-width:1100px;">
     <h2>Trekking History</h2>
     {% if histories %}
-    <table class="table table-dark table-hover">
-        <thead>
-            <tr>
-                <th>Trek</th>
-                <th>Location</th>
-                <th>Completion Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for history in histories %}
-            <tr>
-                <td>{{ history.booking.trek.name }}</td>
-                <td>{{ history.booking.trek.location }}</td>
-                <td>{{ history.completion_date }}</td>
-                <td>
-                    {% if not history.rating %}
-                    <a href="{{ url_for('rate_trek', booking_id=history.booking_id) }}" class="btn btn-primary btn-sm">Rate Trek</a>
-                    {% else %}
-                    <span class="badge badge-success">Reviewed</span>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Trek</th>
+                    <th>Location</th>
+                    <th>Completion Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for history in histories %}
+                <tr>
+                    <td>{{ history.booking.trek.name }}</td>
+                    <td>{{ history.booking.trek.location }}</td>
+                    <td>{{ history.completion_date }}</td>
+                    <td>
+                        {% if not history.rating %}
+                        <a href="{{ url_for('rate_trek', booking_id=history.booking_id) }}" class="btn btn-primary btn-sm">Rate Trek</a>
+                        {% else %}
+                        <span class="badge badge-success">Reviewed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
     <div class="alert alert-info">No trekking history found.</div>
     {% endif %}

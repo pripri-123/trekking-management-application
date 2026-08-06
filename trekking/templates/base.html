@@ -12,7 +12,7 @@
       </title>
    </head>
    <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         {% if current_user.role != 'ADMIN' and current_user.role!='STAFF' %}
         <a class="navbar-brand" href="{{ url_for('home_page') }}">Trek & Co</a>
         {% elif current_user.is_authenticated and current_user.role == 'ADMIN' %}

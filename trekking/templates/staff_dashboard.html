@@ -41,31 +41,33 @@ Staff Dashboard
         </div>
     </div>
     <h4>My Assigned Treks</h4>
-    <table class="table table-dark table-hover">
-        <thead>
-            <tr>
-                <th>Trek Name</th>
-                <th>Location</th>
-                <th>Participants</th>
-                <th>Slots</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for trek in assigned_treks %}
-            <tr>
-                <td>{{ trek.name }}</td>
-                <td>{{ trek.location }}</td>
-                <td>{{ trek.bookings|length }}</td>
-                <td>{{ trek.available_slots }}/{{ trek.total_slots }}</td>
-                <td>{{ trek.status }}</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" href="{{ url_for('manage_staff_trek', trek_id=trek.id) }}">Manage</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Trek Name</th>
+                    <th>Location</th>
+                    <th>Participants</th>
+                    <th>Slots</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trek in assigned_treks %}
+                <tr>
+                    <td>{{ trek.name }}</td>
+                    <td>{{ trek.location }}</td>
+                    <td>{{ trek.bookings|length }}</td>
+                    <td>{{ trek.available_slots }}/{{ trek.total_slots }}</td>
+                    <td>{{ trek.status }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{{ url_for('manage_staff_trek', trek_id=trek.id) }}">Manage</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

@@ -21,40 +21,42 @@ Manage Treks
             </div>
         </div>
     </form>
-    <table class="table table-dark table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Trek Name</th>
-                <th>Location</th>
-                <th>Slots</th>
-                <th>Staff</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for trek in treks %}
+    <div class="table-responsive">
+        <table class="table table-dark table-hover">
+            <thead>
                 <tr>
-                    <td>{{ trek.id }}</td>
-                    <td>{{ trek.name }}</td>
-                    <td>{{ trek.location }}</td>
-                    <td>{{ trek.available_slots }}</td>
-                    <td>{{ trek.assigned_staff }}</td>
-                    <td>{{ trek.status }}</td>
-                    <td>
-                        <a class="btn btn-success btn-sm" href="{{ url_for('edit_trek',trek_id=trek.id) }}"><i class="bi bi-pencil-square"></i></a>
-                        <form method="POST"
-                            action="{{ url_for('complete_trek', trek_id=trek.id) }}"
-                            style="display:inline;">
-                            <button type="submit" class="btn btn-warning btn-sm">Complete</button>
-                        </form>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ trek.id }}"><i class="bi bi-trash"></i></button>
-                    </td>
+                    <th>ID</th>
+                    <th>Trek Name</th>
+                    <th>Location</th>
+                    <th>Slots</th>
+                    <th>Staff</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for trek in treks %}
+                    <tr>
+                        <td>{{ trek.id }}</td>
+                        <td>{{ trek.name }}</td>
+                        <td>{{ trek.location }}</td>
+                        <td>{{ trek.available_slots }}</td>
+                        <td>{{ trek.assigned_staff }}</td>
+                        <td>{{ trek.status }}</td>
+                        <td>
+                            <a class="btn btn-success btn-sm" href="{{ url_for('edit_trek',trek_id=trek.id) }}"><i class="bi bi-pencil-square"></i></a>
+                            <form method="POST"
+                                action="{{ url_for('complete_trek', trek_id=trek.id) }}"
+                                style="display:inline;">
+                                <button type="submit" class="btn btn-warning btn-sm">Complete</button>
+                            </form>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ trek.id }}"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% for trek in treks %}
     <div class="modal fade" id="deleteModal{{ trek.id }}" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">

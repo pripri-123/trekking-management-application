@@ -3,7 +3,7 @@
 Manage Users
 {% endblock %}
 {% block content %}
-    <div class="container mt-4" style="max-width:1000px;">
+    <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-3"><h2>Users</h2></div>
         <form method="GET">
             <div class="input-group mb-3">
@@ -18,59 +18,61 @@ Manage Users
                 </div>
             </div>
         </form>
-        <table class="table table-dark table-hover">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Full Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Last Login</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.full_name }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                        {% if user.last_login %}
-                            {{ user.last_login.strftime('%d-%m-%Y') }}
-                        {% else %}
-                            Never
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if user.blacklisted %}
-                            <span class="badge badge-danger">Blacklisted</span>
-                        {% else %}
-                            <span class="badge badge-success">Active</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not user.blacklisted %}
-                            <button
-                                class="btn btn-warning btn-sm"
-                                data-toggle="modal"
-                                data-target="#blacklistModal{{ user.id }}">
-                                Blacklist
-                            </button>
-                        {% else %}
-                            <form method="POST"
-                                action="{{ url_for('unblacklist_user', user_id=user.id) }}"
-                                style="display:inline;">
-                                <button type="submit" class="btn btn-success btn-sm">Unblacklist</button>
-                            </form>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Last Login</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.full_name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.last_login %}
+                                {{ user.last_login.strftime('%d-%m-%Y') }}
+                            {% else %}
+                                Never
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.blacklisted %}
+                                <span class="badge badge-danger">Blacklisted</span>
+                            {% else %}
+                                <span class="badge badge-success">Active</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not user.blacklisted %}
+                                <button
+                                    class="btn btn-warning btn-sm"
+                                    data-toggle="modal"
+                                    data-target="#blacklistModal{{ user.id }}">
+                                    Blacklist
+                                </button>
+                            {% else %}
+                                <form method="POST"
+                                    action="{{ url_for('unblacklist_user', user_id=user.id) }}"
+                                    style="display:inline;">
+                                    <button type="submit" class="btn btn-success btn-sm">Unblacklist</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% for user in users %}
         {% if not user.blacklisted %}
