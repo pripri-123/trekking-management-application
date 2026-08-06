@@ -123,7 +123,7 @@ def profile():
         existing_user = User.query.filter(User.id != current_user.id, ((User.username == form.username.data) | (User.email == form.email.data))).first()
         if existing_user:
             flash('Username or email already exists.', 'danger')
-            return render_template('profile.html', form=form)
+            return render_template('user/profile.html', form=form)
 
         current_user.full_name = form.full_name.data
         current_user.username = form.username.data
@@ -491,6 +491,20 @@ def blacklist_staff(staff_id):
     flash("Staff has been blacklisted.", "success")
     return redirect(url_for('manage_staff'))
 
+@app.route('/admin/unblacklist_staff/<int:staff_id>', methods=['POST'])
+@login_required
+def unblacklist_staff(staff_id):
+    if current_user.role != 'ADMIN':
+        flash("Access Denied", "danger")
+        return redirect(url_for('home_page'))
+
+    staff = Staff.query.get_or_404(staff_id)
+    staff.user.blacklisted = False
+    db.session.commit()
+
+    flash("Staff has been unblacklisted.", "success")
+    return redirect(url_for('manage_staff'))
+
 @app.route('/staff/dashboard')
 @login_required
 def staff_dashboard():
@@ -594,16 +608,6 @@ def complete_staff_trek(trek_id):
     flash('Trek completed successfully.', 'success')
     return redirect(url_for('manage_staff_trek', trek_id=trek.id))
 
-@app.route('/staff/trek/<int:trek_id>/participants')
-@login_required
-def view_participants(trek_id):
-
-    trek = Trek.query.get_or_404(trek_id)
-    if not is_assigned_staff(trek):
-        flash('Access Denied.', 'danger')
-        return redirect(url_for('staff_dashboard'))
-
-    return render_template('participants.html', trek=trek, bookings=trek.bookings)
 
 @app.route('/staff/profile', methods=['GET', 'POST'])
 @login_required
@@ -647,7 +651,7 @@ def remove_participant(booking_id):
     db.session.delete(booking)
     db.session.commit()
     flash('Participant removed successfully.', 'success')
-    return redirect(url_for('manage_staff_trek', trek_id=trek.id))
+    return redirect(url_for('staff/manage_staff_trek', trek_id=trek.id))
 
 @app.route('/trekker/dashboard')
 @login_required

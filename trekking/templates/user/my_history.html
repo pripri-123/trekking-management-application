@@ -11,23 +11,40 @@ My Trek History
             <thead>
                 <tr>
                     <th>Trek</th>
-                    <th>Location</th>
                     <th>Completion Date</th>
+                    <th>Rating</th>
+                    <th>Review</th>
                     <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
             {% for history in histories %}
                 <tr>
                     <td>{{ history.booking.trek.name }}</td>
-                    <td>{{ history.booking.trek.location }}</td>
                     <td>{{ history.completion_date }}</td>
                     <td>
-                        {% if not history.rating %}
-                        <a href="{{ url_for('rate_trek', booking_id=history.booking_id) }}" class="btn btn-primary btn-sm">Rate Trek</a>
+                        {% if history.rating %}
+                            ⭐ {{ history.rating }}/5
                         {% else %}
-                        <span class="badge badge-success">Reviewed</span>
+                            Not Rated
                         {% endif %}
+                    </td>
+                    <td>
+                        {% if history.review %}
+                            {{ history.review }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{{ url_for('rate_trek', booking_id=history.booking_id) }}">
+                            {% if history.rating %}
+                                Edit Review
+                            {% else %}
+                                Rate Trek
+                            {% endif %}
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

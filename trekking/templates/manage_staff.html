@@ -67,7 +67,21 @@ Manage Staff
                         <td>{{ staff.phone }}</td>
                         <td>Approved</td>
                         <td>
-                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#blacklistModal{{ staff.id }}">Blacklist</button>
+                            {% if staff.user.blacklisted %}
+                            <form method="POST"
+                                action="{{ url_for('unblacklist_staff',
+                                staff_id=staff.id) }}"
+                                style="display:inline;">
+                                <button class="btn btn-success btn-sm">Unblacklist</button>
+                            </form>
+                            {% else %}
+                            <form method="POST"
+                                action="{{ url_for('blacklist_staff',
+                                staff_id=staff.id) }}"
+                                style="display:inline;">
+                                <button class="btn btn-danger btn-sm">Blacklist</button>
+                            </form>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
