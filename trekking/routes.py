@@ -65,7 +65,7 @@ def book_trek(trek_id):
     db.session.add(booking)
     db.session.commit()
     flash('Trek booked successfully!', 'success')
-    return redirect(url_for('user/my_bookings'))
+    return redirect(url_for('my_bookings'))
 
 @app.route('/cancel_booking/<int:booking_id>', methods=['POST'])
 @login_required
@@ -196,6 +196,9 @@ def staff_register_page():
         db.session.commit()
         flash('Registration successful. Waiting for admin approval.', category='info')
         return redirect(url_for('login_page'))
+    if form.errors != {}:
+            for err_message in form.errors.values():
+                flash(f'There was an error with creating staff: {err_message}', category='danger')
     return render_template('staff_register.html', form=form)
 
 
